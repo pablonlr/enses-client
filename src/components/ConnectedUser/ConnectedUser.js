@@ -10,6 +10,7 @@ const { Meta } = Card;
 const { Paragraph } = Typography;
 
 function ConnectedUser(props) {
+  
   const userAddr = "0xA7aE820d9442366930BC79a809Feaa132aD8ABD8"
   const logoutFunc = props.logoutFunction
   const { data, isError, isLoading, isFetching, isSuccess } = useEnsName({
