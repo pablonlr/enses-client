@@ -1,9 +1,12 @@
 import React from 'react'
-import { Row, Card, Col, Avatar, Typography, Popover, Descriptions,Tag, Divider, Space } from 'antd';
+import { Row, Card, Col, Avatar, Typography, Popover, Descriptions,Tag, Divider, Space, Button} from 'antd';
 import Meta from 'antd/lib/card/Meta';
 import {useParams} from 'react-router-dom'
 import { useQuery, gql } from "@apollo/client";
 import { useCategoriesForLabelQuery } from '../../services/wordsInSpanish';
+import CategorizationButton from '../CategorizationButton/CategorizationButton';
+import CategoryTags from '../CategoryTags/CategoryTags';
+import { SearchOutlined } from '@ant-design/icons';
 
 const { Paragraph } = Typography;
 const { CheckableTag } = Tag;
@@ -114,15 +117,14 @@ function Itemdetail(props) {
     <Col xs={24} xl={8}>
     <Divider style={{ marginTop: 40, marginBottom: 40}} orientation="left"><Typography.Title level={5}>Categorías: </Typography.Title>
     <div>
-      {categories?.map((category) => {
-        if (category === "null") {
-          return
-        }
-          return <Tag key={category} color="#55a0f2">{category}</Tag>
-      })}
-      <CheckableTag> Añadir categoría</CheckableTag>
+      
+        <CategoryTags categories={categories?.Categories}></CategoryTags>
+        <CategorizationButton label={registrations.domain?.labelName} alreadyInSpanish={categories?.Categories.length > 0}/>
+        
     </div>
+    
     </Divider>
+    
     
     </Col>
   </Row>

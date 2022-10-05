@@ -2,7 +2,7 @@ import React from 'react';
 import { Routes, Route, Link} from 'react-router-dom';
 import { getDefaultProvider } from 'ethers'
 import {Layout, Typography, Space} from 'antd';
-import Navbar from './components/Navbar/Navbar';
+
 import './App.css'
 import { Content, Header } from 'antd/lib/layout/layout';
 import Itemdetail from "./components/ItemDetail/Itemdetail"
@@ -21,7 +21,11 @@ import {
   WagmiConfig,
 } from 'wagmi';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
-import { publicProvider } from 'wagmi/providers/public';;
+import { publicProvider } from 'wagmi/providers/public';import PendingTable from './components/PendingTable/PendingTable';
+import SearchBarFiltered from './components/SearchBarFiltered/SearchBarFiltered';
+import DomainsTable from './components/DomainsTable/DomainsTable';
+import Navbar from './components/Navbar/Navbar';
+;
 
 const { chains, provider } = configureChains(
   [chain.mainnet],
@@ -48,6 +52,8 @@ const apolloClient = new ApolloClient({
 });
 
 
+
+
 function App() {
   return (
     <WagmiConfig client={wagmiClient}>
@@ -59,24 +65,28 @@ function App() {
                           overflow: "hidden"
                         
                           }}>
-          <div className='logo'></div>
-          <div className='navbar' >
-        <div style={{float:"right", margin:10}}>
-          <RainbowButton/>
-        </div>
-                          
-        </div>
+        
+        
+        
+        <Navbar></Navbar>
+        
+     
         </Header>
         <Content
+        style={{
+          backgroundColor: "white",     
+          overflow: "hidden",
+          
+          }}
         >
           
-            <ApolloProvider client={apolloClient}>
+          <ApolloProvider client={apolloClient}>
           <Routes>
-          <Route exact path="/" element={<DomainsList />}>
-              
-          </Route>
-          <Route exact path="/domain/:domainName" element={<Itemdetail/>}>
-          </Route>
+          <Route exact path="/" element={<DomainsList/>}></Route>
+          <Route exact path="/search/" element={<SearchBarFiltered />}></Route>
+          <Route exact path="/search/result" element={<DomainsTable />}></Route>
+          <Route exact path="/domain/:domainName" element={<Itemdetail/>}></Route>
+          <Route exact path="/moderate/category/pending" element={<PendingTable/>}></Route>
           </Routes>
           </ApolloProvider>
           

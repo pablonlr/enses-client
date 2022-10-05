@@ -1,13 +1,15 @@
 import React, {useState, useEffect} from 'react'
 import {Switch, Route, Link} from 'react-router-dom'
+import { skipToken } from "@reduxjs/toolkit/query"
 //import {useWordsInSpanishFromArrayQuery} from "../../services/wordsInSpanish"
 import { useEnsName, useEnsAvatar } from 'wagmi'
 import { useLazyQuery, gql } from "@apollo/client";
 import { Row, Card, Col, Avatar, Typography, Popover } from 'antd';
 import Meta from 'antd/lib/card/Meta';
 import SvgComponent from "./DomainAvatar"
-import { useWordsInSpanishFromArrayQuery } from '../../services/wordsInSpanish';
+import { useWordsInSpanishFromArrayQuery, useCategoriesFromArrayQuery } from '../../services/wordsInSpanish';
 import { useAccount } from 'wagmi'
+import CategoryTags from '../CategoryTags/CategoryTags';
 const { Paragraph } = Typography;
 
 
@@ -18,8 +20,10 @@ const { Paragraph } = Typography;
 
 
 function DomainsList() {
-    const { address, isConnecting, isDisconnected } = useAccount()
+    const { isConnecting, isDisconnected } = useAccount()
+    const address = "0xA7aE820d9442366930BC79a809Feaa132aD8ABD8"
     const [domainsENS, setDomainsENS] = useState([]);
+    const [arrOfAddr, setArrOfAddr] = useState(skipToken);
     const tokensQuery = gql`
     {
      registrations(first: 1000, where: { registrant: "${address?.toLowerCase()}" }) {
@@ -46,7 +50,6 @@ function DomainsList() {
       })();
       setDomainsENS(data?.registrations)
     }, [address, data])
-    console.log(data)
     /*
     useEffect(() => {
 
@@ -91,9 +94,17 @@ function DomainsList() {
     
       }, [address]);
       */
-
-        const arrOfAddr = domainsENS?.map(a=> a?.domain?.labelName);
+      useEffect(() => {
+        if (domainsENS && domainsENS?.length>1) {
+          setArrOfAddr(domainsENS?.map(a=> a?.domain?.labelName))
+        }
+      }, [domainsENS])
+        
         const {data: spanishWords, isLoading} =  useWordsInSpanishFromArrayQuery(arrOfAddr)
+
+
+        const {data: categories} = useCategoriesFromArrayQuery(arrOfAddr)
+        console.log(categories)
       if (isConnecting) {
         return <div>Conectando billetera...</div>
       }
@@ -137,9 +148,9 @@ function DomainsList() {
                               src={`https://metadata.ens.domains/mainnet/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/${domain.labelhash}/image`}
                             />
                           }
-    
                         >
-                         <Meta title={spanishWords?.includes(domain.labelName) ? "🔵 En Español": " " }/>
+                         <Meta style={{marginBottom: 8}} title={(spanishWords?.includes(domain.labelName)  ) ? "🔵 En Español": " " }/>
+                         {categories && (domain.labelName in categories) && <><CategoryTags  categories={categories[domain.labelName].Categories}> </CategoryTags></>}
                         </Card>
 
                       </Popover>
