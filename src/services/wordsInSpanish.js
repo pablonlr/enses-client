@@ -1,7 +1,7 @@
 import {createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 
-const baseUrl = "http://185.137.181.3:8080/"
+const baseUrl = "https://185.137.181.3/"
 
 //const baseUrl = "http://127.0.0.1:8080"
 
