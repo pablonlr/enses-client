@@ -20,8 +20,7 @@ const { Paragraph } = Typography;
 
 
 function DomainsList() {
-    const { isConnecting, isDisconnected } = useAccount()
-    const address = "0xA7aE820d9442366930BC79a809Feaa132aD8ABD8"
+    const {address, isConnecting, isDisconnected } = useAccount()
     const [domainsENS, setDomainsENS] = useState([]);
     const [arrOfAddr, setArrOfAddr] = useState(skipToken);
     const tokensQuery = gql`
