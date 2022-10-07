@@ -85,7 +85,7 @@ function DomainsTable() {
       <div>Error</div>
     )
   }
-  if (loading || categories === "undefined") {
+  if (loading  || !categories) {
     return (
       <div>loading...</div>
     )
