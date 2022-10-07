@@ -7,6 +7,7 @@ import {
     Form,
     Input,
     InputNumber,
+    message,
     Radio,
     Select,
     Space,
@@ -40,7 +41,7 @@ function SearchBarFiltered() {
         end: replaceUnd(values["field-end"]),
         lang: ""
        }
-       console.log(params)
+       
    search(params)
   };
 
@@ -49,6 +50,8 @@ function SearchBarFiltered() {
         if (result.isSuccess) {
             if(result.data?.length>0){
                 navigate("result",{state: result.data});
+            } else {
+              message.warn("No se encontraron resultados")
             }
             
         }

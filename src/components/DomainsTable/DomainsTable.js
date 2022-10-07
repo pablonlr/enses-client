@@ -56,7 +56,6 @@ function DomainsTable() {
     const { state } = useLocation();
    // const state = ["casa", "vida","accion", "desarrollo", "eth", "jgjjsgfhe", "loco", "loca", "amor", "amante", "amorio", "salir"]
     const {data: categories} = useCategoriesFromArrayQuery(state)
-    console.log(categories)
     const st = JSON.stringify(state)
     const queryString = gql`
 {
@@ -81,23 +80,23 @@ function DomainsTable() {
 `;
     
   const { data, loading, error } = useQuery(queryString);
-  console.log(error)
   if (error) {
     return (
       <div>Error</div>
     )
   }
-  if (loading) {
+  if (loading || categories === "undefined") {
     return (
-      <div>loading</div>
+      <div>loading...</div>
     )
   }
   
   const tableValues = []
   //fet registrations
    data.registrations?.map((registration) => {
-    if(registration?.labelName?.length >3 )
+    if(registration?.labelName?.length >3)
     {
+      
       tableValues.push(
         {
           key: registration?.labelName,
@@ -138,7 +137,7 @@ function DomainsTable() {
       
     }
   }
-   console.log(tableValues)
+   
   return (
     <Table style={{margin: 10}} scroll={{x: true}} columns={columns} dataSource={tableValues} />
   )
