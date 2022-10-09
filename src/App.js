@@ -25,6 +25,7 @@ import { publicProvider } from 'wagmi/providers/public';import PendingTable from
 import SearchBarFiltered from './components/SearchBarFiltered/SearchBarFiltered';
 import DomainsTable from './components/DomainsTable/DomainsTable';
 import Navbar from './components/Navbar/Navbar';
+import PopulateFrom from './components/PopulateForm/PopulateFrom';
 ;
 
 const { chains, provider } = configureChains(
@@ -67,8 +68,10 @@ function App() {
                           }}>
         
         
-        
+        <div style={{float:"cene"}}>
         <Navbar></Navbar>
+        </div>
+        
         
      
         </Header>
@@ -87,6 +90,7 @@ function App() {
           <Route exact path="/search/result" element={<DomainsTable />}></Route>
           <Route exact path="/domain/:domainName" element={<Itemdetail/>}></Route>
           <Route exact path="/moderate/category/pending" element={<PendingTable/>}></Route>
+          <Route exact path="/moderate/category/populate" element={<PopulateFrom/>}></Route>
           </Routes>
           </ApolloProvider>
           
