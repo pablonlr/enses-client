@@ -64,6 +64,18 @@ export const wordsInSpanish = createApi({
                     }
                 }),
         }),
+        poulateCategories: builder.mutation({
+            query: (props) => ({
+                    url: `/category/populate/${props.category}`,
+                    method: "POST",
+                    body: props.message,
+                    headers: {
+                        "Content-Type" : "application/json",
+                        "Address": props.address,
+                        "Signature": props.signature,
+                    }
+                }),
+        }),
         getCategories: builder.query({
             query: () => ({
                     url: `/category`,
@@ -103,4 +115,5 @@ export const {
     useGetPendingCategoriesQuery,
     useFilterWordsMutation,
     useCategoriesFromArrayQuery,
+    usePoulateCategoriesMutation,
 } = wordsInSpanish;
