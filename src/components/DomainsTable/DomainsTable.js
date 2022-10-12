@@ -1,7 +1,7 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import { json, Link, useLocation } from "react-router-dom";
-import { useQuery, gql } from "@apollo/client";
-import { Table, Typography } from 'antd';
+import { useQuery, gql, useLazyQuery } from "@apollo/client";
+import { message, Table, Typography } from 'antd';
 import { useCategoriesFromArrayQuery } from '../../services/wordsInSpanish';
 import CategoryTags from '../CategoryTags/CategoryTags';
 
@@ -52,14 +52,11 @@ const columns = [
   
 ];
 
-function DomainsTable() {
-    const { state } = useLocation();
-   // const state = ["casa", "vida","accion", "desarrollo", "eth", "jgjjsgfhe", "loco", "loca", "amor", "amante", "amorio", "salir"]
-    const {data: categories} = useCategoriesFromArrayQuery(state)
-    const st = JSON.stringify(state)
-    const queryString = gql`
-{
-  registrations(first: 1000, where: { labelName_in: ${st}}) {
+const getQueryString = (arr) => {
+  const st = JSON.stringify(arr)
+  return gql`
+query Registrations($payload: String!) {
+  registrations(first: 1000, where: { labelName_in: $payload}) {
             expiryDate
             registrationDate
             labelName
@@ -78,23 +75,102 @@ function DomainsTable() {
           }
 }
 `;
+}
+
+function DomainsTable() {
+    const { state } = useLocation();
     
-  const { data, loading, error } = useQuery(queryString);
+   // const state = ["casa", "vida","accion", "desarrollo", "eth", "jgjjsgfhe", "loco", "loca", "amor", "amante", "amorio", "salir"]
+    const {data: categories} = useCategoriesFromArrayQuery(state)
+    const [remaining, setRemaining] = useState([])
+    const [payload, setPayload] = useState([])
+    const [registrations, setRegistrations] = useState([])
+    const queryString = gql`
+    query Registrations($payload: [String!]) {
+      registrations(first: 1000, where: { labelName_in: $payload}) {
+                expiryDate
+                registrationDate
+                labelName
+                registrant {
+                  id
+                }
+                domain{
+                  id
+                  createdAt
+                  labelName
+                  labelhash
+                  owner {
+                    id
+                  }
+                }
+              }
+    }
+    `;
+
+    useEffect(() => {
+      const rema = state.slice(0,state.length)
+      const firstK = rema.splice(0,1000)
+      setPayload(firstK)
+      
+      setRemaining(rema)
+      if (state.length > 1000 && state.length <5000 ) {
+        message.loading("sea paciente, estamos cargando miles de resultados")
+      }
+      if (state.length >= 5000) {
+        message.warn("la cantidad de resultados es muy grande. Puede demorar minutos")
+      }
+    }, [])
+
+    
+    
+  //const payload = JSON.stringify(firstk)
+  const { data, loading, error } = useQuery(queryString, {
+    variables: { payload },
+  });
+  useEffect(() => {
+    if(data) 
+    {
+      if (registrations.length < 1) {
+         setRegistrations(data.registrations)
+        return
+      }
+      if (remaining.length>0) {
+      const rema = remaining
+      const firstK = rema.splice(0,1000)
+      const newRg = [...registrations,...data.registrations]
+      setRegistrations(newRg)
+      setPayload(firstK)
+      setRemaining(rema)
+      
+      }
+      
+    }
+  }, [data])
+  console.log(remaining.length)
+
   if (error) {
+    console.log(error)
     return (
-      <div>Error</div>
+      
+      <div>  Error</div>
     )
   }
-  if (loading  || !categories) {
+  if (loading  || !categories || remaining.length > 0 || payload.length <1) {
+    
     return (
       <div>loading...</div>
     )
+    
   }
+
   
-  const tableValues = []
-  //fet registrations
-   data.registrations?.map((registration) => {
-    if(registration?.labelName?.length >3)
+
+  
+
+  
+  const tableValues = [] 
+   registrations.map((registration) => {
+    if(registration?.labelName?.length >2)
     {
       
       tableValues.push(
@@ -113,15 +189,15 @@ function DomainsTable() {
   })
   for (let i =0; i < state.length; i++) {
     let breaked = false
-    for(let j =0; j < data.registrations.length; j++) {
-      if (state[i] === data.registrations[j].labelName) {
+    for(let j =0; j < registrations.length; j++) {
+      if (state[i] === registrations[j].labelName) {
         breaked = true
         break
       }
       
     }
     if (!breaked) {
-      if(state[i].length >3 ) {
+      if(state[i].length >2 ) {
         tableValues.push(
           {
             key: state[i],
