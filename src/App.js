@@ -26,6 +26,7 @@ import SearchBarFiltered from './components/SearchBarFiltered/SearchBarFiltered'
 import DomainsTable from './components/DomainsTable/DomainsTable';
 import Navbar from './components/Navbar/Navbar';
 import PopulateFrom from './components/PopulateForm/PopulateFrom';
+import SimpleSearch from './components/SimpleSearch/SimpleSearch';
 ;
 
 const { chains, provider } = configureChains(
@@ -86,8 +87,9 @@ function App() {
           <ApolloProvider client={apolloClient}>
           <Routes>
           <Route exact path="/" element={<DomainsList/>}></Route>
-          <Route exact path="/search/" element={<SearchBarFiltered />}></Route>
-          <Route exact path="/search/result" element={<DomainsTable />}></Route>
+          <Route exact path="/filter/" element={<SearchBarFiltered />}></Route>
+          <Route exact path="/search/" element={<SimpleSearch />}></Route>
+          <Route exact path="/filter/result" element={<DomainsTable />}></Route>
           <Route exact path="/domain/:domainName" element={<Itemdetail/>}></Route>
           <Route exact path="/moderate/category/pending" element={<PendingTable/>}></Route>
           <Route exact path="/moderate/category/populate" element={<PopulateFrom/>}></Route>
