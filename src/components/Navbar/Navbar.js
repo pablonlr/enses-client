@@ -2,13 +2,19 @@ import React, {useState} from 'react'
 import RainbowButton from '../RainbowButton/RainbowButton'
 import { Button, Menu, Typography, Avatar } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
-import { ProfileOutlined, SearchOutlined } from '@ant-design/icons';
+import { ProfileOutlined, SearchOutlined,FilterOutlined} from '@ant-design/icons';
 
 const items = [
   {
     label: 'Mis Dominios',
     key: '',
     icon: <ProfileOutlined />,
+  },
+  {
+    label: 'Filtrar',
+    key: 'filter',
+    icon: <FilterOutlined />,
+
   },
   {
     label: 'Buscar',
