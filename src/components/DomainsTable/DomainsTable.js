@@ -130,23 +130,24 @@ function DomainsTable() {
   useEffect(() => {
     if(data) 
     {
-      if (registrations.length < 1) {
-         setRegistrations(data.registrations)
-        return
-      }
+      
       if (remaining.length>0) {
-      const rema = remaining
+      const rema = remaining.slice(0, remaining.length)
       const firstK = rema.splice(0,1000)
-      const newRg = [...registrations,...data.registrations]
-      setRegistrations(newRg)
       setPayload(firstK)
       setRemaining(rema)
-      
+      const newRg = [...registrations,...data.registrations]
+      setRegistrations(newRg)
       }
       
     }
   }, [data])
-  console.log(remaining.length)
+  if(data) {
+    if (registrations.length < 1) {
+      setRegistrations(data.registrations)
+     return
+   }
+  }
 
   if (error) {
     console.log(error)
