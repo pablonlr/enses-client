@@ -16,7 +16,7 @@ import {
     Typography,
   } from 'antd';
 import SelectDomain from '../SelectDomain/SelectDomain';
-import { useFilterWordsMutation } from '../../services/wordsInSpanish';
+import { useFilterDomainsMutation } from '../../services/wordsInSpanish';
 import {SearchOutlined } from '@ant-design/icons';
 
 function replaceUnd(value) {
@@ -26,20 +26,20 @@ function replaceUnd(value) {
     return value
 }
 
-function SearchBarFiltered() {
-   const [category, setCategory] = useState("")
+function GlobalFiltered() {
    const [form] = Form.useForm();
-   const [search, result] = useFilterWordsMutation();
+   const [search, result] = useFilterDomainsMutation();
    const navigate = useNavigate();
 
    const onFinish = (values) => {
     const params = {
         length: replaceUnd(values["field-length"]),
         contains: replaceUnd(values["field-contains"]),
-        category: replaceUnd(values["field-category"]),
+        nocontains: replaceUnd(values["field-nocontains"]),
         start: replaceUnd(values["field-start"]),
         end: replaceUnd(values["field-end"]),
-        lang: ""
+        special: replaceUnd(values["field-special"]),
+        emojis: replaceUnd(values["field-emojis"]),
        }
        
    search(params)
@@ -48,14 +48,12 @@ function SearchBarFiltered() {
   useEffect(() => {
     if (result) {
         if (result.isSuccess) {
-            if(result.data?.length> 0 && result.data?.length < 20000){
-                navigate("result",{state: {
-                  labels: result.data,
-                  from: "local"
-                }}
-                  
-                );
-            } else if (result.data?.length >= 20000) {
+            if(result.data?.length>0 && result.data?.length < 20000){
+              navigate("result",{state: {
+                labels: result.data,
+                from: "global"
+              }})
+            }else if (result.data?.length >= 20000) {
               message.error("Demasiados resultados de búsqueda, por favor acote los filtros")
             } else {
               message.warn("No se encontraron resultados")
@@ -67,7 +65,7 @@ function SearchBarFiltered() {
 
   return (
     <div >
-    <Typography.Title level={3} style={{textAlign:"center", margin:30, }}> Realiza una búsqueda en nuestra librería orgánica de palabras y dominios:</Typography.Title>
+    <Typography.Title level={3} style={{textAlign:"center", margin:30, }}>Realiza una búsqueda entre los millones de dominios ENS registrados: </Typography.Title>
     <Form
     form={form}
      style={{
@@ -84,20 +82,32 @@ function SearchBarFiltered() {
       onFinish={onFinish}
       > 
 
-        <Form.Item label="Palabras que contengan" name={`field-contains`}>
+     <Form.Item label="Dominios que contengan" name={`field-contains`}>
         <Input />
       </Form.Item>
-      <Form.Item label="Palabras que empiecen por:" name={`field-start`}>
+      <Form.Item label="Dominios que no contengan" name={`field-nocontains`}>
         <Input />
       </Form.Item>
-      <Form.Item label="Palabras que terminen en:" name={`field-end`}>
+      <Form.Item label="Dominios que empiecen por:" name={`field-start`}>
+        <Input />
+      </Form.Item>
+      <Form.Item label="Dominios que terminen en:" name={`field-end`}>
         <Input />
       </Form.Item>
       <Form.Item label="Cantidad de letras:" name={`field-length`}>
         <InputNumber min={1} />
       </Form.Item>
-      <Form.Item label="Categoría" name={`field-category`}>
-        <SelectDomain onChange={(value)=> {setCategory(value)}}></SelectDomain>
+      <Form.Item label="Caracteres especiales:" name={`field-special`}>
+      <Select>
+          <Select.Option value={"true"} >Con caracteres especiales</Select.Option>
+          <Select.Option value={"false"} >Sin caracteres especiales</Select.Option>
+        </Select>
+      </Form.Item>
+      <Form.Item label="Emojis:" name={`field-emojis`}>
+      <Select>
+          <Select.Option value={"true"} >Con emojis</Select.Option>
+          <Select.Option value={"false"} >Sin emojis</Select.Option>
+        </Select>
       </Form.Item>
       <div style={{
         textAlign: "center",
@@ -123,4 +133,4 @@ function SearchBarFiltered() {
   )
 }
 
-export default SearchBarFiltered
+export default GlobalFiltered

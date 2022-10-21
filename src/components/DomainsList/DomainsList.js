@@ -123,7 +123,7 @@ function DomainsList() {
                   const domain = registration?.domain
                     let date = new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit'}).format(domain.createdAt*1000)
                 return (
-                    <Col xs={24} sm={12} xl={6} lg={4} className="domain-card" key={domain.name}>
+                    <Col xs={24} sm={12} md={8} lg={6} xl={4} xxl={4}  className="domain-card" key={domain.name}>
                       <Link to={`domain/${domain.name}`}>
                       <Popover placement="bottom" title={ <Typography.Title level={5}>{domain.name}</Typography.Title>} content={
                         <>
@@ -137,7 +137,7 @@ function DomainsList() {
                           hoverable={true}
                           style={{
                           maxWidth: 300,
-                          margin: "10px",
+                          //margin: "10px",
                           borderRadius: "30px",
                           overflow: "hidden"
                           }}

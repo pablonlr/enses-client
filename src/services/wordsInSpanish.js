@@ -3,7 +3,7 @@ import {createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 const baseUrl = "https://api.ensespañol.com/"
 
-//const baseUrl = "http://127.0.0.1:8080"
+//onst baseUrl = "http://127.0.0.1:8080"
 
 
 
@@ -96,7 +96,16 @@ export const wordsInSpanish = createApi({
         }),
         filterWords: builder.mutation({
             query: (props) => ({
-                    url: `/words/filter?length=${props.length}&contains=${props.contains}&category=${props.category}&start=${props.start}&end=${props.end}&lang=${props.lang}`,
+                    url: `/filter/words?length=${props.length}&contains=${props.contains}&category=${props.category}&start=${props.start}&end=${props.end}&lang=${props.lang}`,
+                    method: "GET",
+                    headers: {
+                        "Content-Type" : "application/json"
+                    }
+                }),
+        }),
+        filterDomains: builder.mutation({
+            query: (props) => ({
+                    url: `/filter/domains?length=${props.length}&contains=${props.contains}&nocontains=${props.nocontains}&start=${props.start}&end=${props.end}&special=${props.special}&emojis=${props.emojis}`,
                     method: "GET",
                     headers: {
                         "Content-Type" : "application/json"
@@ -114,6 +123,7 @@ export const {
     useGetCategoriesQuery,
     useGetPendingCategoriesQuery,
     useFilterWordsMutation,
+    useFilterDomainsMutation,
     useCategoriesFromArrayQuery,
     usePoulateCategoriesMutation,
 } = wordsInSpanish;

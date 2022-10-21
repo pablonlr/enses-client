@@ -27,12 +27,17 @@ import DomainsTable from './components/DomainsTable/DomainsTable';
 import Navbar from './components/Navbar/Navbar';
 import PopulateFrom from './components/PopulateForm/PopulateFrom';
 import SimpleSearch from './components/SimpleSearch/SimpleSearch';
-;
+import ListDomains from './components/ListDomains/ListDomains';
+
+
+
+import { ConfigProvider } from 'antd';
+import GlobalFiltered from './components/GlobalFiltered/GlobalFiltered';
 
 const { chains, provider } = configureChains(
   [chain.mainnet],
   [
-    alchemyProvider({ apiKey: process.env.ALCHEMY_ID }),
+    //alchemyProvider({ apiKey: process.env.ALCHEMY_ID }),
     publicProvider()
   ]
 );
@@ -80,17 +85,19 @@ function App() {
         style={{
           backgroundColor: "white",     
           overflow: "hidden",
-          
           }}
         >
           
           <ApolloProvider client={apolloClient}>
           <Routes>
           <Route exact path="/" element={<DomainsList/>}></Route>
-          <Route exact path="/filter/" element={<SearchBarFiltered />}></Route>
+          <Route exact path="/filter/word" element={<SearchBarFiltered />}></Route>
+          <Route exact path="/filter/global" element={<GlobalFiltered />}></Route>
           <Route exact path="/search/" element={<SimpleSearch />}></Route>
-          <Route exact path="/filter/result" element={<DomainsTable />}></Route>
+          <Route exact path="/filter/word/result" element={<DomainsTable />}></Route>
+          <Route exact path="/filter/global/result" element={<DomainsTable />}></Route>
           <Route exact path="/domain/:domainName" element={<Itemdetail/>}></Route>
+          <Route exact path="/category/" element={<ListDomains/>}></Route>
           <Route exact path="/moderate/category/pending" element={<PendingTable/>}></Route>
           <Route exact path="/moderate/category/populate" element={<PopulateFrom/>}></Route>
           </Routes>

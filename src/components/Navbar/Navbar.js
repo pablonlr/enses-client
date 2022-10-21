@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import RainbowButton from '../RainbowButton/RainbowButton'
 import { Button, Menu, Typography, Avatar } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
-import { ProfileOutlined, SearchOutlined,FilterOutlined} from '@ant-design/icons';
+import { ProfileOutlined, SearchOutlined,FilterOutlined, GlobalOutlined} from '@ant-design/icons';
 
 const items = [
   {
@@ -11,10 +11,21 @@ const items = [
     icon: <ProfileOutlined />,
   },
   {
-    label: 'Filtrar',
-    key: 'filter',
+    label: 'Filtros',
+    key: 'filter/word',
     icon: <FilterOutlined />,
-
+    children: [
+      {
+        label: 'Filtro en Español',
+        key: 'filter/word',
+        icon: <FilterOutlined />,
+      },
+      {
+        label: 'Filtro Global',
+        key: 'filter/global',
+        icon: <GlobalOutlined />,
+      }
+    ]
   },
   {
     label: 'Buscar',
