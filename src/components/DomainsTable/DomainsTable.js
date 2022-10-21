@@ -105,7 +105,6 @@ query Registrations($payload: String!) {
 
 function DomainsTable() {
     const { state } = useLocation();
-   console.log(state.from)
    // const state = ["casa", "vida","accion", "desarrollo", "eth", "jgjjsgfhe", "loco", "loca", "amor", "amante", "amorio", "salir"]
     const {data: categories} = useCategoriesFromArrayQuery(state.labels)
     const [remaining, setRemaining] = useState([])
@@ -134,7 +133,6 @@ function DomainsTable() {
     `;
 
     useEffect(() => {
-      console.log(state.labels.length)
       const rema = state.labels.slice(0,state.labels.length)
       const firstK = rema.splice(0,1000)
       setPayload(firstK)
