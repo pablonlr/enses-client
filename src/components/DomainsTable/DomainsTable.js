@@ -106,7 +106,7 @@ query Registrations($payload: String!) {
 function DomainsTable() {
     const { state } = useLocation();
    // const state = ["casa", "vida","accion", "desarrollo", "eth", "jgjjsgfhe", "loco", "loca", "amor", "amante", "amorio", "salir"]
-    const {data: categories} = useCategoriesFromArrayQuery(state.labels)
+    const {data: categories} = useCategoriesFromArrayQuery(state)
     const [remaining, setRemaining] = useState([])
     const [payload, setPayload] = useState([])
     const [registrations, setRegistrations] = useState([])
@@ -133,18 +133,18 @@ function DomainsTable() {
     `;
 
     useEffect(() => {
-      const rema = state.labels.slice(0,state.labels.length)
+      const rema = state.slice(0,state.length)
       const firstK = rema.splice(0,1000)
       setPayload(firstK)
       
       setRemaining(rema)
-      if (state.labels.length > 1000 && state.labels.length <5000 ) {
+      if (state.length > 1000 && state.length <5000 ) {
         message.loading("sea paciente, estamos cargando miles de resultados")
       }
-      if (state.labels.length >= 5000 && state.labels.length <30000) {
+      if (state.length >= 5000 && state.length <30000) {
         message.warn("la cantidad de resultados es muy grande. Puede demorar minutos")
       }
-      if (state.labels.length >= 30000) {
+      if (state.length >= 30000) {
         message.error("La cantidad de resultados")
       }
     }, [])
@@ -216,25 +216,25 @@ function DomainsTable() {
     }
     
   })
-  if (state.from === "local") {
-    for (let i =0; i < state.labels.length; i++) {
+  if ("l" === "local") {
+    for (let i =0; i < state.length; i++) {
       let breaked = false
       for(let j =0; j < registrations.length; j++) {
-        if (state.labels[i] === registrations[j].labelName) {
+        if (state[i] === registrations[j].labelName) {
           breaked = true
           break
         }
         
       }
       if (!breaked) {
-        if(state.labels[i].length >2 ) {
+        if(state[i].length >2 ) {
           tableValues.push(
             {
-              key: state.labels[i],
-              label: state.labels[i],
+              key: state[i],
+              label: state[i],
               available: "Si",
-              domain: <Typography.Link href={`https://app.ens.domains/name/${state.labels[i]}.eth/register`} target="_blank"> {`Registrar ${state.labels[i]} en ENS Domains`}</Typography.Link>,
-              category: <CategoryTags categories={categories[state.labels[i]]?.Categories}></CategoryTags>,
+              domain: <Typography.Link href={`https://app.ens.domains/name/${state[i]}.eth/register`} target="_blank"> {`Registrar ${state[i]} en ENS Domains`}</Typography.Link>,
+              category: <CategoryTags categories={categories[state[i]]?.Categories}></CategoryTags>,
               creationDate: "-",
               expiryDate: "-"
             },
@@ -246,7 +246,7 @@ function DomainsTable() {
   }
    
   return (
-    <Table style={{margin: 10}} scroll={{x: true}} columns={state.from === "global" ? columnsGlobal: columnsLocal} dataSource={tableValues} />
+    <Table style={{margin: 10}} scroll={{x: true}} columns={columnsGlobal} dataSource={tableValues} />
   )
 }
 

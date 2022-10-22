@@ -48,12 +48,9 @@ function GlobalFiltered() {
   useEffect(() => {
     if (result) {
         if (result.isSuccess) {
-            if(result.data?.length>0 && result.data?.length < 20000){
-              navigate("result",{state: {
-                labels: result.data,
-                from: "global"
-              }})
-            }else if (result.data?.length >= 20000) {
+            if(result.data?.length>0 && result.data?.length < 50000){
+              navigate("result",{state: result.data})
+            }else if (result.data?.length >= 50000) {
               message.error("Demasiados resultados de búsqueda, por favor acote los filtros")
             } else {
               message.warn("No se encontraron resultados")
