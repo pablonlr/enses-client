@@ -33,6 +33,7 @@ import ListDomains from './components/ListDomains/ListDomains';
 
 import { ConfigProvider } from 'antd';
 import GlobalFiltered from './components/GlobalFiltered/GlobalFiltered';
+import BulkSearch from './components/BulkSearch/BulkSearch';
 
 const { chains, provider } = configureChains(
   [chain.mainnet],
@@ -93,7 +94,9 @@ function App() {
           <Route exact path="/" element={<DomainsList/>}></Route>
           <Route exact path="/filter/word" element={<SearchBarFiltered />}></Route>
           <Route exact path="/filter/global" element={<GlobalFiltered />}></Route>
-          <Route exact path="/search/" element={<SimpleSearch />}></Route>
+          <Route exact path="/search/simple" element={<SimpleSearch />}></Route>
+          <Route exact path="/search/bulk" element={<BulkSearch />}></Route>
+          <Route exact path="/search/bulk/result" element={<DomainsTable />}></Route>
           <Route exact path="/filter/word/result" element={<DomainsTable />}></Route>
           <Route exact path="/filter/global/result" element={<DomainsTable />}></Route>
           <Route exact path="/domain/:domainName" element={<Itemdetail/>}></Route>

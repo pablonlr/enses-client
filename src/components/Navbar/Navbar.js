@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import RainbowButton from '../RainbowButton/RainbowButton'
 import { Button, Menu, Typography, Avatar } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
-import { ProfileOutlined, SearchOutlined,FilterOutlined, GlobalOutlined} from '@ant-design/icons';
+import { ProfileOutlined, SearchOutlined,FilterOutlined, GlobalOutlined, UnorderedListOutlined} from '@ant-design/icons';
 
 const items = [
   {
@@ -29,9 +29,20 @@ const items = [
   },
   {
     label: 'Buscar',
-    key: 'search',
+    key: 'search/simple',
     icon: <SearchOutlined />,
-
+    children: [
+      {
+        label: 'Búsqueda individual',
+        key: 'search/simple',
+        icon: <SearchOutlined />,
+      },
+      {
+        label: 'Búsqueda múltiple',
+        key: 'search/bulk',
+        icon: <UnorderedListOutlined />,
+      }
+    ]
   },
 ]
 
