@@ -103,7 +103,7 @@ function PopulateFrom() {
        return
       }
       if(result?.isError)  {
-       message.success("ocurrió un error en la solicitud, intente nuevamente")
+       message.error("ocurrió un error en la solicitud, intente nuevamente")
        
       }
    }, [result])

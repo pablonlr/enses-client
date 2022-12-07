@@ -92,6 +92,7 @@ function PendingTable() {
         setModal(false)
         message.success("solicitud completada exitosamente")
         refetch();
+        
         return
        }
        if(result?.isError)  {
