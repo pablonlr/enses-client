@@ -4,7 +4,7 @@ import { useGetCategoriesQuery } from '../../services/wordsInSpanish';
 import { OmitProps } from 'antd/lib/transfer/ListBody';
 const { Option } = Select;
 
-const omit = "español"
+const omit = ""
 
 function SelectDomain(props) {
     const {data: categories} = useGetCategoriesQuery()

@@ -15,7 +15,6 @@ function CategorizationButton(props) {
     const {data: categories} = useGetCategoriesQuery()
     const [category, setCategory] = useState('');
     const [postCatgory, result] = usePostCategoriesForLabelMutation()
-    console.log(categories)
 
 
     useEffect(() => {

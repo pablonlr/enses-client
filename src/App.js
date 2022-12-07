@@ -34,6 +34,7 @@ import ListDomains from './components/ListDomains/ListDomains';
 import { ConfigProvider } from 'antd';
 import GlobalFiltered from './components/GlobalFiltered/GlobalFiltered';
 import BulkSearch from './components/BulkSearch/BulkSearch';
+import ModerateForm from './components/PendingTable/ModerateForm';
 
 const { chains, provider } = configureChains(
   [chain.mainnet],
@@ -101,8 +102,9 @@ function App() {
           <Route exact path="/filter/global/result" element={<DomainsTable />}></Route>
           <Route exact path="/domain/:domainName" element={<Itemdetail/>}></Route>
           <Route exact path="/category/" element={<ListDomains/>}></Route>
-          <Route exact path="/moderate/category/pending" element={<PendingTable/>}></Route>
-          <Route exact path="/moderate/category/populate" element={<PopulateFrom/>}></Route>
+          <Route exact path="/moderate/pending" element={<PendingTable/>}></Route>
+          <Route exact path="/moderate/populate" element={<PopulateFrom/>}></Route>
+          <Route exact path="/moderate/delete" element={<ModerateForm/>}></Route>
           </Routes>
           </ApolloProvider>
           

@@ -76,6 +76,15 @@ export const wordsInSpanish = createApi({
                     }
                 }),
         }),
+        getCategory: builder.query({
+            query: (props) => ({
+                    url: `/category/${props.categoryID}`,
+                    method: "GET",
+                    headers: {
+                        "Content-Type" : "application/json"
+                    }
+                }),
+        }),
         getCategories: builder.query({
             query: () => ({
                     url: `/category`,
@@ -126,4 +135,5 @@ export const {
     useFilterDomainsMutation,
     useCategoriesFromArrayQuery,
     usePoulateCategoriesMutation,
+    useGetCategoryQuery,
 } = wordsInSpanish;
