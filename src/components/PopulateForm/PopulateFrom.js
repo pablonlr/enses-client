@@ -10,6 +10,7 @@ import {
 import SignModal from '../SignModal/SignModal';
 import { json } from 'react-router-dom';
 import { usePoulateCategoriesMutation } from '../../services/wordsInSpanish';
+import { arrayify } from 'ethers/lib/utils';
 
   const { TextArea } = Input;
 
@@ -23,6 +24,25 @@ function PopulateFrom() {
     const handleCancel = () => {
       setModal(false);
     };
+
+    function deleteETHAndEmptyDomains(values) {
+      const response = []
+       for( let i =0; i < values.length; i++) {
+          const st = values[i].replace(/ /g,'').toLowerCase()
+          if (st.length < 3) {
+              continue
+          }
+          if (st.endsWith(".eth")) {
+              if (st.length < 7) {
+                  continue
+              }
+              response.push(st.slice(0,st.length - 4))
+              continue
+          }
+          response.push(st)
+       }
+       return response
+    }
 
     const handleConfirm = () => {
       
@@ -40,9 +60,7 @@ function PopulateFrom() {
       
       setModal(true)
       const arr = st.split("\n")
-      const filtered = arr.filter(value => {
-         return value != null && value.length>0 ;
-      });
+      const filtered = deleteETHAndEmptyDomains(arr)
       setmessToSing(JSON.stringify(filtered))
     }
 
