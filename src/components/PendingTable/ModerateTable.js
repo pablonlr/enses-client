@@ -90,7 +90,7 @@ function ModerateTable({categoryID}) {
         return
        }
        if(result?.isError)  {
-        message.success("ocurrió un error en la solicitud, intente nuevamente")
+        message.error("ocurrió un error en la solicitud, intente nuevamente")
         
        }
     }, [result])
@@ -131,7 +131,7 @@ function ModerateTable({categoryID}) {
             }}
           >
             <Button type="primary" onClick={disapprove} disabled={!hasSelected} loading={loading}>
-            Eliminar
+              Eliminar
             </Button>
           
           </span>

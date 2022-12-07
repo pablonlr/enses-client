@@ -105,6 +105,7 @@ function App() {
           <Route exact path="/moderate/pending" element={<PendingTable/>}></Route>
           <Route exact path="/moderate/populate" element={<PopulateFrom/>}></Route>
           <Route exact path="/moderate/delete" element={<ModerateForm/>}></Route>
+          
           </Routes>
           </ApolloProvider>
           

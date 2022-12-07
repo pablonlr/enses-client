@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useGetCategoryQuery } from '../../services/wordsInSpanish';
 import SelectDomain from '../SelectDomain/SelectDomain';
+import DeleteCategory from './DeleteCategory';
 import ModerateTable from './ModerateTable';
 
 function ModerateForm() {
@@ -14,7 +15,13 @@ function ModerateForm() {
       <SelectDomain onChange={handleChange}></SelectDomain>
       </div>
     
-    {category.length > 1 ? <ModerateTable categoryID={category} /> : <div style={{"marginTop": "5px", "marginLeft": "8px"}}>Seleccione una categoría para continuar</div>}
+    {category.length > 1 ? 
+    <div><ModerateTable categoryID={category} /> 
+        <DeleteCategory categoryID={category}/>
+     </div>
+    : 
+    <div style={{"marginTop": "5px", "marginLeft": "8px"}}>Seleccione una categoría para continuar</div>
+    }
     </div>
   )
 }
