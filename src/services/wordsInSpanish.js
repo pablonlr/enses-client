@@ -3,7 +3,7 @@ import {createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 const baseUrl = "https://api.ensespañol.com/"
 
-//onst baseUrl = "http://127.0.0.1:8080"
+//const baseUrl = "http://127.0.0.1:8080"
 
 
 
@@ -106,6 +106,15 @@ export const wordsInSpanish = createApi({
                     }
                 }),
         }),
+        getCategoriesTickets: builder.query({
+            query: () => ({
+                    url: `/categories-ticket`,
+                    method: "GET",
+                    headers: {
+                        "Content-Type" : "application/json"
+                    }
+                }),
+        }),
         getPendingCategories: builder.query({
             query: () => ({
                     url: `/category/pending/`,
@@ -148,5 +157,6 @@ export const {
     useCategoriesFromArrayQuery,
     usePoulateCategoriesMutation,
     useGetCategoryQuery,
-    useDeleteCategoryMutation
+    useDeleteCategoryMutation,
+    useGetCategoriesTicketsQuery,
 } = wordsInSpanish;

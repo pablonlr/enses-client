@@ -6,15 +6,36 @@ import {
     message,
     Modal,
     Typography,
+    Table,
   } from 'antd';
 import SignModal from '../SignModal/SignModal';
 import { json } from 'react-router-dom';
-import { usePoulateCategoriesMutation } from '../../services/wordsInSpanish';
+import { useGetCategoriesTicketsQuery, usePoulateCategoriesMutation } from '../../services/wordsInSpanish';
 import { arrayify } from 'ethers/lib/utils';
 
   const { TextArea } = Input;
 
+  const columns = [
+    {
+      title: 'Categoría',
+      dataIndex: 'category',
+    },
+    {
+      title: 'Puntos',
+      dataIndex: 'points',
+    },
+    {
+      title: 'Nombre Reducido',
+      dataIndex: 'short',
+    },
+    {
+      title: 'Cantidad de Dominios',
+      dataIndex: 'domainsCount',
+    },
+  ];
+
 function PopulateFrom() {
+    const {data: categories, isLoading, isError,isFetching, refetch} = useGetCategoriesTicketsQuery()
     const [form] = Form.useForm();
     const [{signature, address}, setSignature] = useState('');
     const [messToSign, setmessToSing] = useState('')
@@ -46,22 +67,38 @@ function PopulateFrom() {
 
     const handleConfirm = () => {
       
-      const st = form.getFieldValue("field-words")
-      const cat = form.getFieldValue("field-name")
+      const st = form.getFieldValue("field-words") 
+      const cat = form.getFieldValue("field-name") 
+      const short = form.getFieldValue("field-shortName") ? form.getFieldValue("field-shortName") : ""
+      const points = form.getFieldValue("field-points") ? form.getFieldValue("field-points") : 0
+      
       if(!cat) {
         message.warn("Debe especificar una categoría")
         return
       }
-      if(!st) {
-        message.warn("Debe añadir al menos una palabra")
-        return
-      }
       
+      
+      /*
+      Domains   []string `json:"domains"`
+	ShortName string   `json:"shortName"`
+	Points    int      `json:"points"`
+	Topic     string   `json:"topic"`
+      */
       
       setModal(true)
-      const arr = st.split("\n")
-      const filtered = deleteETHAndEmptyDomains(arr)
-      setmessToSing(JSON.stringify(filtered))
+      let filtered = [];
+      if(st) {
+        const arr = st.split("\n")
+        filtered = deleteETHAndEmptyDomains(arr)
+      }
+     
+      const queryObj = {
+        category: cat,
+        domains: filtered,
+        shortName: short,
+        points: +points,
+      }
+      setmessToSing(JSON.stringify(queryObj))
     }
 
     const handleOk = () => {
@@ -103,10 +140,21 @@ function PopulateFrom() {
        return
       }
       if(result?.isError)  {
-       message.error("ocurrió un error en la solicitud, intente nuevamente")
-       
+       message.error("ocurrió un error en la solicitud. \n" +result.error.error)
       }
    }, [result])
+
+
+   //{"CategoryID":"Objetos","ShortName":"OBJ","PriorityPoints":10,"Topic":"","DomainCounter":273}
+
+   const data = categories?.map((category) => {
+      return {
+        "category":  category.CategoryID,
+        "short": category.ShortName,
+        "points": category.PriorityPoints,
+        "domainsCount": category.DomainCounter
+      }
+   })
 
   return (
     <div>
@@ -128,7 +176,13 @@ function PopulateFrom() {
     >
 
     <Form.Item label="Nombre de la categoría" name={`field-name`}>
-        <Input />
+        <Input placeholder='Si no existe, se creará una nueva categoría'/>
+    </Form.Item>
+    <Form.Item label="Nombre reducido (para imagen)" name={`field-shortName`}>
+        <Input placeholder='Ejemplo "0-100" para Cero a Cien (máximo 8 caracteres)' maxLength={8}/>
+    </Form.Item>
+    <Form.Item label="Puntos de relevancia (Orden más relevante)" name={`field-points`}>
+        <Input type='number' placeholder='A más puntos más relevancia'/>
     </Form.Item>
     <Form.Item label="Palabras" name={`field-words`}>
         <TextArea autoSize={true} placeholder={"Separa las palabras en una nueva línea, ejemplo: \nperro\ngato\ntortuga\n..."}/>
@@ -150,6 +204,7 @@ function PopulateFrom() {
    
    
     </Form>
+    <Table columns={columns} dataSource={data}/>
     <Modal title={`Confirma que quieres continuar`}
         //onOk={handleOk}
         onCancel={handleCancel}

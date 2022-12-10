@@ -55,7 +55,7 @@ const items = [
         icon: <QuestionOutlined />,
       },
       {
-        label: 'Rellenar',
+        label: 'Gestionar',
         key: 'moderate/populate',
         icon: <AppstoreAddOutlined />,
       },
