@@ -147,7 +147,7 @@ function PopulateFrom() {
 
    //{"CategoryID":"Objetos","ShortName":"OBJ","PriorityPoints":10,"Topic":"","DomainCounter":273}
 
-   const data = categories?.map((category) => {
+   const data = categories?.Categories.map((category) => {
       return {
         "category":  category.CategoryID,
         "short": category.ShortName,
